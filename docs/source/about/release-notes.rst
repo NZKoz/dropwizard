@@ -9,7 +9,10 @@ Release Notes
 v1.1.0: Unreleased
 ==================
 
+* Upgraded to Hibernate ORM 5.2.7, introducing a series of deprecations and API changes in preparation for Hibernate ORM 6 `#1871 <https://github.com/dropwizard/dropwizard/pull/1871>`_
 * Add runtime certificate reload via admin task `#1799 <https://github.com/dropwizard/dropwizard/pull/1799>`_
+* List available tasks lexically via admin task `#1939 <https://github.com/dropwizard/dropwizard/pull/1939>`_
+* Add support for optional resource protection `#1931 <https://github.com/dropwizard/dropwizard/pull/1931>`_
 * Invalid enum request parameters result in 400 response with possible choices `#1734 <https://github.com/dropwizard/dropwizard/pull/1734>`_
 * Enum request parameters are deserialized in the same fuzzy manner, as the request body `#1734 <https://github.com/dropwizard/dropwizard/pull/1734>`_
 * Request parameter name displayed in response to parse failure `#1734 <https://github.com/dropwizard/dropwizard/pull/1734>`_
@@ -18,38 +21,64 @@ v1.1.0: Unreleased
 * Allow overriding of a default ``ExceptionMapper`` without re-registering all other defaults `#1768 <https://github.com/dropwizard/dropwizard/pull/1768>`_
 * Allow overriding of default ``JsonProvider`` `#1788 <https://github.com/dropwizard/dropwizard/pull/1788>`_
 * Finer-grain control of exception behaviour in view renderers `#1820 <https://github.com/dropwizard/dropwizard/pull/1820>`_
+* Default ``WebApplicationException`` handler preserves exception HTTP headers `#1912 <https://github.com/dropwizard/dropwizard/pull/1912>`_
 * JerseyClientBuilder can create rx-capable client `#1721 <https://github.com/dropwizard/dropwizard/pull/1721>`_
-* Configurable response for empty `Optional` return values `#1784 <https://github.com/dropwizard/dropwizard/pull/1784>`_
+* Configurable response for empty ``Optional`` return values `#1784 <https://github.com/dropwizard/dropwizard/pull/1784>`_
 * Add web test container agnostic way of invoking requests in ``ResourceTestRule`` `#1778 <https://github.com/dropwizard/dropwizard/pull/1778>`_
 * Remove OptionalValidatedValueUnwrapper `#1583 <https://github.com/dropwizard/dropwizard/pull/1583>`_
 * Allow constraints to be applied to type `#1586 <https://github.com/dropwizard/dropwizard/pull/1586>`_
 * Use LoadingCache in CachingAuthenticator `#1615 <https://github.com/dropwizard/dropwizard/pull/1615>`_
 * Switch cert and peer validation to false by default `#1855 <https://github.com/dropwizard/dropwizard/pull/1855>`_
 * Introduce CachingAuthorizer `#1639 <https://github.com/dropwizard/dropwizard/pull/1639>`_
-* Enhance logging of registered endpoints `#1804 <https://github.com/dropwizard/dropwizard/pull/1804>`_
+* Enhance of registered endpoints `#1804 <https://github.com/dropwizard/dropwizard/pull/1804>`_
+* Flush loggers on command exit instead of destroying logging `#1947 <https://github.com/dropwizard/dropwizard/pull/1947>`_
+* Add support for neverBlock on AsyncAppenders `#1917 <https://github.com/dropwizard/dropwizard/pull/1917>`_
 * Allow to disable caching of Mustache views `#1289 <https://github.com/dropwizard/dropwizard/issues/1289>`_
 * Add the ``httpCompliance`` option to the HTTP configuration `#1825 <https://github.com/dropwizard/dropwizard/pull/1825>`_
 * Add the ``blockingTimeout`` option to the HTTP configuration `#1795 <https://github.com/dropwizard/dropwizard/pull/1795>`_
 * Add ``min`` and ``mins`` as valid ``Duration`` abbreviations `#1833 <https://github.com/dropwizard/dropwizard/pull/1833>`_
+* Register Jackson parameter-names modules `#1908 <https://github.com/dropwizard/dropwizard/pull/1908>`_
+* Native Jackson deserialization of enums when Jackson annotations are present `#1909 <https://github.com/dropwizard/dropwizard/pull/1909>`_
+* Add ``JsonConfigurationFactory`` for first-class support of the JSON configuration `#1897 <https://github.com/dropwizard/dropwizard/pull/1897>`_
+* Support disabled and enabled attributes for metrics `#1957 <https://github.com/dropwizard/dropwizard/pull/1957>`_
+* Support ``@UnitOfWork`` in sub-resources `#1959 <https://github.com/dropwizard/dropwizard/pull/1959>`_
 * Upgraded to Jackson 2.8.6
 * Upgraded to Hibernate Validator 5.3.4.Final
-* Upgraded to Jetty 9.4.0.v20161208 `#1875 <https://github.com/dropwizard/dropwizard/pull/1875>`
+* Upgraded to Hibernate ORM 5.2.8.Final
+* Upgraded to Jetty 9.4.2.v20170220
 * Upgraded to tomcat-jdbc 8.5.9
-* Upgraded to Objenesis 2.4 `#1654 <https://github.com/dropwizard/dropwizard/pull/1654>`_
-* Upgraded to AssertJ 3.6.1
+* Upgraded to Objenesis 2.5.1
+* Upgraded to AssertJ 3.6.2
 * Upgraded to classmate 1.3.3
+* Upgraded to Metrics 3.2.2 `#1970 <https://github.com/dropwizard/dropwizard/pull/1970>`_
 * Upgraded to Mustache 0.9.4 `#1766 <https://github.com/dropwizard/dropwizard/pull/1766>`_
-* Upgraded to Mockito 2.6.1
+* Upgraded to Mockito 2.7.12
 * Upgraded to Liquibase 3.5.3
-* Upgraded to Logback 1.1.8
-* Upgraded to JDBI 2.77
-* Upgraded to Jersey 2.25
+* Upgraded to Logback 1.2.1 `#1918 <https://github.com/dropwizard/dropwizard/pull/1927>`_
+* Upgraded to JDBI 2.78
+* Upgraded to Jersey 2.25.1
 * Upgraded to javassist 3.21.0-GA
 * Upgraded to Guava 21.0
-* Upgraded to SLF4J 1.7.22
+* Upgraded to SLF4J 1.7.24
 * Upgraded to H2 1.4.193
 * Upgraded to Joda-Time 2.9.7
 * Upgraded to commons-lang3 3.5
+* Upgraded to Apache HTTP Client 4.5.3
+
+.. _rel-1.0.7:
+
+v1.0.7 Mar 20 2017
+==================
+
+* Upgrade to Metrics 3.1.4 `#1969 <https://github.com/dropwizard/dropwizard/pull/1969>`_
+
+.. _rel-1.0.6:
+
+v1.0.6 Jan 30 2017
+==================
+
+* Switch cert and peer validation to false by default `#1855 <https://github.com/dropwizard/dropwizard/pull/1855>`_
+* Add a JUnit rule for testing database interactions `#1905 <https://github.com/dropwizard/dropwizard/pull/1905>`_
 
 .. _rel-1.0.5:
 

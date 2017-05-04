@@ -227,8 +227,8 @@ all custom exception mappers will need to be registered on the builder, similarl
 Test Containers
 ---------------
 
-Note that the in-memory Jersey test container does not support all features, such as the ``@Context`` injection used by
-``BasicAuthFactory`` and ``OAuthFactory``. A different `test container`__ can be used via
+Note that the in-memory Jersey test container does not support all features, such as the ``@Context`` injection.
+A different `test container`__ can be used via
 ``ResourceTestRule.Builder#setTestContainerFactory(TestContainerFactory)``.
 
 For example, if you want to use the `Grizzly`_ HTTP server (which supports ``@Context`` injections) you need to add the
@@ -337,6 +337,10 @@ Adding ``DropwizardAppRule`` to your JUnit test class will start the app prior t
 running and stop it again when they've completed (roughly equivalent to having used ``@BeforeClass`` and ``@AfterClass``).
 ``DropwizardAppRule`` also exposes the app's ``Configuration``,
 ``Environment`` and the app object itself so that these can be queried by the tests.
+
+If you don't want to use the ``dropwizard-client`` module or find it excessive for testing, you can get access to
+a Jersey HTTP client by calling the `client` method on the rule. The returned client is managed by the rule
+and can be reused across tests.
 
 .. code-block:: java
 

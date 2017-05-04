@@ -1,11 +1,13 @@
 package io.dropwizard.hibernate;
 
 import com.google.common.collect.ImmutableList;
+
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.junit.Before;
@@ -14,8 +16,11 @@ import org.junit.Test;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaQuery;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,7 +57,7 @@ public class AbstractDAOTest {
         }
 
         @Override
-        public String uniqueResult(Query query) throws HibernateException {
+        public String uniqueResult(Query<String> query) throws HibernateException {
             return super.uniqueResult(query);
         }
 
@@ -62,7 +67,7 @@ public class AbstractDAOTest {
         }
 
         @Override
-        public List<String> list(Query query) throws HibernateException {
+        public List<String> list(Query<String> query) throws HibernateException {
             return super.list(query);
         }
 
@@ -84,7 +89,10 @@ public class AbstractDAOTest {
 
     private final SessionFactory factory = mock(SessionFactory.class);
     private final Criteria criteria = mock(Criteria.class);
-    private final Query query = mock(Query.class);
+    @SuppressWarnings("unchecked")
+    private final CriteriaQuery<String> criteriaQuery = mock(CriteriaQuery.class);
+    @SuppressWarnings("unchecked")
+    private final Query<String> query = mock(Query.class);
     private final Session session = mock(Session.class);
     private final MockDAO dao = new MockDAO(factory);
 
@@ -93,6 +101,7 @@ public class AbstractDAOTest {
         when(factory.getCurrentSession()).thenReturn(session);
         when(session.createCriteria(String.class)).thenReturn(criteria);
         when(session.getNamedQuery(anyString())).thenReturn(query);
+        when(session.createQuery(anyString(), same(String.class))).thenReturn(query);
     }
 
     @Test
@@ -116,6 +125,14 @@ public class AbstractDAOTest {
     }
 
     @Test
+    public void getsTypedQueries() throws Exception {
+        assertThat(dao.query("HQL"))
+            .isEqualTo(query);
+
+        verify(session).createQuery("HQL", String.class);
+    }
+
+    @Test
     public void createsNewCriteriaQueries() throws Exception {
         assertThat(dao.criteria())
                 .isEqualTo(criteria);
@@ -129,6 +146,23 @@ public class AbstractDAOTest {
 
         assertThat(dao.uniqueResult(criteria))
                 .isEqualTo("woo");
+    }
+
+    @Test
+    public void returnsUniqueResultsFromJpaCriteriaQueries() throws Exception {
+        when(session.createQuery(criteriaQuery)).thenReturn(query);
+        when(query.getResultList()).thenReturn(ImmutableList.of("woo"));
+
+        assertThat(dao.uniqueResult(criteriaQuery))
+            .isEqualTo("woo");
+    }
+
+    @Test(expected = NonUniqueResultException.class)
+    public void throwsOnNonUniqueResultsFromJpaCriteriaQueries() throws Exception {
+        when(session.createQuery(criteriaQuery)).thenReturn(query);
+        when(query.getResultList()).thenReturn(ImmutableList.of("woo", "boo"));
+
+        dao.uniqueResult(criteriaQuery);
     }
 
     @Test
@@ -147,6 +181,14 @@ public class AbstractDAOTest {
                 .containsOnly("woo");
     }
 
+    @Test
+    public void returnsUniqueListsFromJpaCriteriaQueries() throws Exception {
+        when(session.createQuery(criteriaQuery)).thenReturn(query);
+        when(query.getResultList()).thenReturn(ImmutableList.of("woo"));
+
+        assertThat(dao.list(criteriaQuery))
+            .containsOnly("woo");
+    }
 
     @Test
     public void returnsUniqueListsFromQueries() throws Exception {

@@ -342,9 +342,9 @@ minBufferPoolSize        64 bytes            The minimum size of the buffer pool
 bufferPoolIncrement      1KiB                The increment by which the buffer pool should be increased.
 maxBufferPoolSize        64KiB               The maximum size of the buffer pool.
 acceptorThreads          (Jetty's default)   The number of worker threads dedicated to accepting connections.
-                                             By default is *max*(1, *min*(4, #CPUs/8)).
+                                             By default is *max(1, min(4, #CPUs/8))*.
 selectorThreads          (Jetty's default)   The number of worker threads dedicated to sending and receiving data.
-                                             By default is *max*(1, *min*(4, #CPUs/2)).
+                                             By default is *max(1, min(4, #CPUs/2))*.
 acceptQueueSize          (OS default)        The size of the TCP/IP accept queue for the listening socket.
 reuseAddress             true                Whether or not ``SO_REUSEADDR`` is enabled on the listening socket.
 soLingerTime             (disabled)          Enable/disable ``SO_LINGER`` with the specified linger time.
@@ -620,6 +620,8 @@ logFormat              default      The Logback pattern with which events will b
                                     the Logback_ documentation for details.
 filterFactories        (none)       The list of filters to apply to the appender, in order, after
                                     the thresold.
+neverBlock             false        Prevent the wrapping asynchronous appender from blocking when its underlying queue is full.
+                                    Set to true to disable blocking.
 ====================== ===========  ===========
 
 .. _Logback: http://logback.qos.ch/manual/layouts.html#conversionWord
@@ -679,6 +681,8 @@ logFormat                    default      The Logback pattern with which events 
                                           the Logback_ documentation for details.
 filterFactories              (none)       The list of filters to apply to the appender, in order, after
                                           the thresold.
+neverBlock                   false        Prevent the wrapping asynchronous appender from blocking when its underlying queue is full.
+                                          Set to true to disable blocking.
 ============================ ===========  ==================================================================================================
 
 
@@ -720,6 +724,8 @@ stackTracePrefix             \t           The prefix to use when writing stack t
                                           to the syslog server separately from the main message)
 filterFactories              (none)       The list of filters to apply to the appender, in order, after
                                           the thresold.
+neverBlock                   false        Prevent the wrapping asynchronous appender from blocking when its underlying queue is full.
+                                          Set to true to disable blocking.
 ============================ ===========  ==================================================================================================
 
 
@@ -783,6 +789,8 @@ The following options are available for all metrics reporters.
           rateUnit: seconds
           excludes: (none)
           includes: (all)
+          excludesAttributes: (none)
+          includesAttributes: (all)
           useRegexFilters: false
           frequency: 1 minute
 
@@ -794,6 +802,10 @@ durationUnit           milliseconds   The unit to report durations as. Overrides
 rateUnit               seconds        The unit to report rates as. Overrides per-metric rate units.
 excludes               (none)         Metrics to exclude from reports, by name. When defined, matching metrics will not be reported.
 includes               (all)          Metrics to include in reports, by name. When defined, only these metrics will be reported.
+excludesAttributes     (none)         Metric attributes to exclude from reports, by name (e.g. ``p98``, ``m15_rate``, ``stddev``).
+                                      When defined, matching metrics attributes will not be reported.
+includesAttributes     (all)          Metrics attributes to include in reports, by name (e.g. ``p98``, ``m15_rate``, ``stddev``).
+                                      When defined, only these attributes will be reported.
 useRegexFilters        false          Indicates whether the values of the 'includes' and 'excludes' fields should be treated as regular expressions or not.
 frequency              (none)         The frequency to report metrics. Overrides the default.
 ====================== =============  ===========
